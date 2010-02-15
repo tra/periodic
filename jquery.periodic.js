@@ -11,7 +11,7 @@ jQuery.periodic = function (options, callback) {
   }, options);
 
   // bookkeeping variables
-  var settings.cur_period = settings.period;
+  settings.cur_period = settings.period;
   var prev_ajax_response = '';
 
   run();
