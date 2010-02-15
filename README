@@ -1,0 +1,6 @@
+More documentation will be forthcoming when the code is more solid but the basic idea is this...
+
+  $.periodic(options, function() {
+    $.ajax(ajax_options);
+  }
+
