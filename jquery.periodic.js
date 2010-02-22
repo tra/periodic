@@ -7,7 +7,8 @@ jQuery.periodic = function (options, callback) {
     decay        : 1,         // time period multiplier
     on_max       : undefined, // called if max_period is reached
     ajaxComplete : ajaxComplete,
-    reset        : reset
+    decay        : decay,
+    reset        : reset,
   }, options);
 
   // bookkeeping variables
@@ -18,39 +19,45 @@ jQuery.periodic = function (options, callback) {
 
   return this;
 
+  function run() {
+    setTimeout(function() {
+      // set the context (this) for the callback to the settings object
+      callback.call(settings);
+
+      // compute the next value for cur_period
+      decay();
+      
+      // queue up the next run
+      run();
+    }, settings.cur_period);
+  }
+
+  // compute the next delay
+  function decay() {
+    settings.cur_period *= settings.decay
+    if (settings.cur_period < settings.period) {
+      // don't let it drop below the minimum
+      reset();
+    } else if (settings.cur_period > settings.max_period) {
+      settings.cur_period = settings.max_period
+      if (settings.on_max !== undefined) {
+        // call the user-supplied callback if we reach max_period
+        settings.on_max.call(settings);
+      }
+    }
+  }
+
   function reset() {
     settings.cur_period = settings.period;
   }
 
   // convenience function for use with ajax calls
   function ajaxComplete(xhr, status) {
-    if (status === 'success' && prev_ajax_response != xhr.responseText) {
+    if (status === 'success' && prev_ajax_response !== xhr.responseText) {
       // go back to the period whenver the response changes
-      prev_response = xhr.responseText;
+      prev_ajax_response = xhr.responseText;
       reset();
     }
-  }
-
-  function run() {
-    setTimeout(function() {
-      // set the context (this) for the callback to the settings object
-      callback.call(settings);
-
-      // compute the next delay
-      settings.cur_period *= settings.decay
-      if (settings.cur_period < settings.period) {
-        settings.cur_period = settings.period
-      } else if (settings.cur_period > settings.max_period) {
-        settings.cur_period = settings.max_period
-        if (settings.on_max !== undefined) {
-          // call the user-supplied callback if we reach max_period
-          settings.on_max.call(settings);
-        }
-      }
-
-      // queue up the next run
-      run();
-    }, settings.cur_period);
   }
   
   // other functions we might want to add
