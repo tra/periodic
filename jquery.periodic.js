@@ -17,7 +17,8 @@ jQuery.periodic = function (options, callback) {
 
   run();
 
-  return this;
+  // return settings so user can tweak them externally
+  return settings;
 
   function run() {
     setTimeout(function() {
