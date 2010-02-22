@@ -88,6 +88,16 @@ The options object recognizes the following settings:
   <tr><td>on_max</td><td>User supplied function to call when the max_period is reached.</td><td>undefined</td></tr>
 </table>
 
+## Utility Functions
+
+This plugin also provides some control of it's functionality via the 'this' variable inside of your callback function.   You can access them via "this.fn" where "fn" is one of the functions described below.
+<table>
+  <tr><th>Utility Function</th><th>Description</th></tr>
+  <tr><td>ajaxComplete(xhr, status)</td><td>A function to be called upon completion of a jQuery.ajax call.   This function will compare the response of current request to that of the previous request and increment or reset the time period accordingly.</td></tr>
+  <tr><td>reset()</td><td>Resets the time period to the configured minimum (options.period)</td></tr>
+  <tr><td>increment()</td><td>Increases the time period as per the settings.</td></tr>
+</table>
+
 ## Installation
 
 Simply download the file jquery.periodic.js to wherever your javascript files live.
