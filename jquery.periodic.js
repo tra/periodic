@@ -33,6 +33,15 @@ jQuery.periodic = function (options, callback) {
     }, settings.cur_period);
   }
 
+  // utility function for use with ajax calls
+  function ajaxComplete(xhr, status) {
+    if (status === 'success' && prev_ajax_response !== xhr.responseText) {
+      // go back to the period whenver the response changes
+      prev_ajax_response = xhr.responseText;
+      reset();
+    }
+  }
+
   // compute the next delay
   function increment() {
     settings.cur_period *= settings.decay
@@ -50,15 +59,6 @@ jQuery.periodic = function (options, callback) {
 
   function reset() {
     settings.cur_period = settings.period;
-  }
-
-  // convenience function for use with ajax calls
-  function ajaxComplete(xhr, status) {
-    if (status === 'success' && prev_ajax_response !== xhr.responseText) {
-      // go back to the period whenver the response changes
-      prev_ajax_response = xhr.responseText;
-      reset();
-    }
   }
   
   // other functions we might want to add
