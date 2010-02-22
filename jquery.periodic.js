@@ -7,7 +7,7 @@ jQuery.periodic = function (options, callback) {
     decay        : 1,         // time period multiplier
     on_max       : undefined, // called if max_period is reached
     ajaxComplete : ajaxComplete,
-    decay        : decay,
+    increment    : increment,
     reset        : reset,
   }, options);
 
@@ -25,7 +25,7 @@ jQuery.periodic = function (options, callback) {
       callback.call(settings);
 
       // compute the next value for cur_period
-      decay();
+      increment();
       
       // queue up the next run
       run();
@@ -33,7 +33,7 @@ jQuery.periodic = function (options, callback) {
   }
 
   // compute the next delay
-  function decay() {
+  function increment() {
     settings.cur_period *= settings.decay
     if (settings.cur_period < settings.period) {
       // don't let it drop below the minimum

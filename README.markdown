@@ -50,7 +50,7 @@ If you need to define your own 'complete' function and would still like to use t
       });
     }
 
-If you'd prefer to have more control over when the period should decay or should be reset to the initial value, then you can use the provided 'decay' and 'reset' functions instead.   For example, if you wanted to base it off of some condition from the returned ajax data:
+If you'd prefer to have more control over when the period should increment or should be reset to the initial value, then you can use the provided 'increment' and 'reset' functions instead.   For example, if you wanted to base it off of some condition from the returned ajax data:
 
     $.periodic({period: 2000, decay: 1.2, max_period: 60000}, function() {
       $p = this;
@@ -61,7 +61,7 @@ If you'd prefer to have more control over when the period should decay or should
           if (need_to_reset_timer()) {
             $p.reset();
           } else {
-            $p.decay();
+            $p.increment();
           }
         },
       });
