@@ -14,14 +14,14 @@ to do any sort of polling task.   Most often, this would be used in conjunction 
 
 You may also set the default options once for your app and just call the plugin with the callback function like this:
 
-    $.extend($.periodic.defaults, some_options);
+    $.periodic.defaults.period = 8888;
 
     $.periodic(function() {
       $.ajax(ajax_options);
     });
 
 The plugin provides built-in settings for decreasing the poll time via a "decay" setting (much like
-prototype's PeriodicalExecuter).  The name of this plugin, 'periodic', is a more grammatically correct description of what it does (a "periodical" is something you read).
+prototype's PeriodicalExecuter).  However, the name of this plugin, 'periodic', is a more grammatically correct description of what it does (a "periodical" is something you read).
 
 ## Examples
 
@@ -40,7 +40,7 @@ this:
       });
     });
 
-Notice that, in the above example, jQuery.periodic provides a utility callback function, ajaxComplete that checks the return value of the ajax request to see if it has changed.   If it hasn't changed since the last call then
+Notice that, in the above example, jQuery.periodic provides a utility callback function, ajax_complete that checks the return value of the ajax request to see if it has changed.   If it hasn't changed since the last call then
 the time between calls will decay as per your settings (1.2 in this example).
 
 If you prefer to set your options separately then the following example is equivalent to the above example:
