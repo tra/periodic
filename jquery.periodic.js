@@ -1,14 +1,24 @@
+/*!
+ * jQuery periodic plugin
+ *
+ * Copyright 2010, Tom Anderson
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ *
+ */
+
 jQuery.periodic = function (options, callback) {
 
+  // if the first argument is a function then assume the options aren't being passed
+  if (jQuery.isFunction(options)) {
+    callback = options;
+    options = {};
+  }
+
   // Merge passed settings with default values
-  var settings = jQuery.extend({
-    period       : 5000,      // 5 sec.
-    max_period   : 1800000,   // 30 min.
-    decay        : 1,         // time period multiplier
-    on_max       : undefined, // called if max_period is reached
-    ajaxComplete : ajaxComplete,
-    increment    : increment,
-    reset        : reset,
+  var settings = jQuery.extend({}, jQuery.periodic.defaults, {
+    ajax_complete : ajaxComplete,
+    increment     : increment,
+    reset         : reset
   }, options);
 
   // bookkeeping variables
@@ -61,8 +71,15 @@ jQuery.periodic = function (options, callback) {
     settings.cur_period = settings.period;
   }
   
-  // other functions we might want to add
+  // other functions we might want to implement
   function pause() {}
   function resume() {}
   function log() {}
 };
+
+jQuery.periodic.defaults = {
+    period       : 4000,      // 4 sec.
+    max_period   : 1800000,   // 30 min.
+    decay        : 1.5,       // time period multiplier
+    on_max       : undefined  // called if max_period is reached
+}
