@@ -31,11 +31,10 @@ of 60 seconds if there are no changes to the content returned from the server.  
 this:
 
     $.periodic({period: 2000, decay: 1.2, max_period: 60000}, function() {
-      $p = this;
-      $.ajax({
+     $.ajax({
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
-        complete: $p.ajax_complete,
+        complete: this.ajax_complete,
         dataType: 'json'
       });
     });
@@ -47,68 +46,64 @@ If you prefer to set your options separately then the following example is equiv
 
     $.extend($.periodic.defaults, {period: 2000, decay: 1.2, max_period: 60000});
     $.periodic(function() {
-      $p = this;
-      $.ajax({
+     $.ajax({
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
-        complete: $p.ajax_complete,
+        complete: this.ajax_complete,
         dataType: 'json'
       });
     });
 
-If you need to define your own 'complete' function and would still like to use the provided function then you could do so like this:
+If you need to define your own 'complete' function and would still like to use the plugin-provided function then you could do so by setting a property in the ajax object to the periodic object so that you can access it from the ajax callbacks.
 
     $.periodic(function() {
-      $p = this;
-      $.ajax({
+     $.ajax({
+        periodic: this,
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
         complete: function(xhr, status) {
           // do your own thing
           do_something_on_complete();
-          // use the utility callback
-          $p.ajax_complete(xhr, status);
+          // use the utility callback via the periodic property in the ajax object
+          this.periodic.ajax_complete(xhr, status);
         },
         dataType: 'json'
       });
     });
 
-Or, if you would rather use one of the simpler jQuery ajax functions, you can call ajax_complete from your success handler like this:
-
-    $.periodic(function() {
-      $p = this;
-      $.get('/my_url' ,function(data, xhr, status) {
-        do_something_with_data(data);
-        $p.ajax_complete(xhr, status);
-      });
-    });
-
-
 If you'd prefer to have more control over when the period should increment or should be reset to the initial value, then you can use the provided 'increment' and 'reset' functions instead.   For example, if you wanted to base it off of some condition from the returned ajax data:
 
     $.periodic(function() {
-      $p = this;
-      $.get('/my_url' ,function(data) {
-        do_something_with_data(data);
-        if (need_to_reset_timer()) {
-          $p.reset();
-        } else {
-          $p.increment();
-        }
+      $.ajax({
+        periodic: this,
+        url: '/update.json',
+        success: function(data) {
+          do_something_with_data(data);
+          if (need_to_reset_timer()) {
+            this.periodic.reset();
+          } else {
+            this.periodic.increment();
+          }
+        },
+        dataType: 'json'
       });
     });
-   
+ 
 You can even set the current value of the period directly by accessing the 'cur_period' value.
 
     $.periodic(function() {
-      $p = this;
-      $.get('/my_url' ,function(data) {
-        do_something_with_data(data);
-        if (need_to_reset_timer()) {
-          $p.cur_period = $p.period;
-        } else {
-          $p.cur_period = 42;
-        }
+      $.ajax({
+        periodic: this,
+        url: '/update.json',
+        success: function(data) {
+          do_something_with_data(data);
+          if (need_to_reset_timer()) {
+            this.periodic.cur_period = this.periodic.period;
+         } else {
+            this.periodic.cur_period = 42;
+         }
+        },
+        dataType: 'json'
       });
     });
 
