@@ -59,12 +59,12 @@ jQuery.periodic = function (options, callback) {
 
   // compute the next delay
   function increment() {
-    settings.cur_period *= settings.decay
+    settings.cur_period *= settings.decay;
     if (settings.cur_period < settings.period) {
       // don't let it drop below the minimum
       reset();
     } else if (settings.cur_period > settings.max_period) {
-      settings.cur_period = settings.max_period
+      settings.cur_period = settings.max_period;
       if (settings.on_max !== undefined) {
         // call the user-supplied callback if we reach max_period
         settings.on_max.call(settings);
@@ -89,4 +89,4 @@ jQuery.periodic.defaults = {
     max_period   : 1800000,   // 30 min.
     decay        : 1.5,       // time period multiplier
     on_max       : undefined  // called if max_period is reached
-}
+};
