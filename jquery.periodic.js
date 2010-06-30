@@ -18,7 +18,8 @@ jQuery.periodic = function (options, callback) {
   var settings = jQuery.extend({}, jQuery.periodic.defaults, {
     ajax_complete : ajaxComplete,
     increment     : increment,
-    reset         : reset
+    reset         : reset,
+    cancel        : cancel
   }, options);
 
   // bookkeeping variables
@@ -34,7 +35,7 @@ jQuery.periodic = function (options, callback) {
   // run (or restart if already running) the looping construct
   function run() {
     // clear/stop existing timer (multiple calls to run() won't result in multiple timers)
-    clearTimeout(settings.tid);
+    cancel();
     // let it rip!
     settings.tid = setTimeout(function() {
       // set the context (this) for the callback to the settings object
@@ -76,6 +77,10 @@ jQuery.periodic = function (options, callback) {
     settings.cur_period = settings.period;
     // restart with the new timeout
     run();
+  }
+
+  function cancel() {
+    clearTimeout(settings.tid);
   }
   
   // other functions we might want to implement

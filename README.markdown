@@ -139,6 +139,7 @@ This plugin also provides some control of it's functionality via the 'this' vari
   <tr><td>ajax_complete(xhr, status)</td><td>A function to be called upon completion of a jQuery.ajax call.   This function will compare the response of current request to that of the previous request and increment or reset the time period accordingly.</td></tr>
   <tr><td>reset()</td><td>Resets the time period to the configured minimum (options.period)</td></tr>
   <tr><td>increment()</td><td>Increases the time period as per the settings.</td></tr>
+  <tr><td>cancel()</td><td>Cancels the periodic call.</td></tr>
 </table>
 
 ## Installation
