@@ -45,7 +45,8 @@ jQuery.periodic = function (options, callback) {
       increment();
       
       // queue up the next run
-      run();
+      if(settings.tid)
+        run();
     }, settings.cur_period);
   }
 
@@ -81,6 +82,7 @@ jQuery.periodic = function (options, callback) {
 
   function cancel() {
     clearTimeout(settings.tid);
+    settings.tid = null;
   }
   
   // other functions we might want to implement
