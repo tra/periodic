@@ -26,15 +26,15 @@ prototype's PeriodicalExecuter).  However, the name of this plugin, 'periodic', 
 ## Examples
 
 Let's say you want to poll your server and update some part of your page by hitting the '/update.json' URL.
-Also, let's set it up to poll the server every 2 seconds initially but to decay 20% until it reaches a maximum 
+Also, let's set it up to poll the server every 2 seconds initially but to decay 20% until it reaches a maximum
 of 60 seconds if there are no changes to the content returned from the server.   This example would look like
 this:
 
-    $.periodic({period: 2000, decay: 1.2, max_period: 60000}, function() {
+    $.periodic({period: 2000, decay: 1.2, max_period: 60000}, function(periodical) {
      $.ajax({
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
-        complete: this.ajax_complete,
+        complete: periodical.ajax_complete,
         dataType: 'json'
       });
     });
@@ -45,20 +45,20 @@ the time between calls will decay as per your settings (1.2 in this example).
 If you prefer to set your options separately then the following example is equivalent to the above example:
 
     $.extend($.periodic.defaults, {period: 2000, decay: 1.2, max_period: 60000});
-    $.periodic(function() {
+    $.periodic(function(periodical) {
      $.ajax({
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
-        complete: this.ajax_complete,
+        complete: periodical.ajax_complete,
         dataType: 'json'
       });
     });
 
 If you need to define your own 'complete' function and would still like to use the plugin-provided function then you could do so by setting a property in the ajax object to the periodic object so that you can access it from the ajax callbacks.
 
-    $.periodic(function() {
+    $.periodic(function(periodical) {
      $.ajax({
-        periodic: this,
+        periodic: periodical,
         url: '/update.json',
         success: function(data) { do_something_with_data(data) },
         complete: function(xhr, status) {
@@ -73,9 +73,9 @@ If you need to define your own 'complete' function and would still like to use t
 
 If you'd prefer to have more control over when the period should increment or should be reset to the initial value, then you can use the provided 'increment' and 'reset' functions instead.   For example, if you wanted to base it off of some condition from the returned ajax data:
 
-    $.periodic(function() {
+    $.periodic(function(periodical) {
       $.ajax({
-        periodic: this,
+        periodic: periodical,
         url: '/update.json',
         success: function(data) {
           do_something_with_data(data);
@@ -88,12 +88,12 @@ If you'd prefer to have more control over when the period should increment or sh
         dataType: 'json'
       });
     });
- 
+
 You can even set the current value of the period directly by accessing the 'cur_period' value.
 
-    $.periodic(function() {
+    $.periodic(function(periodical) {
       $.ajax({
-        periodic: this,
+        periodic: periodical,
         url: '/update.json',
         success: function(data) {
           do_something_with_data(data);
@@ -133,7 +133,7 @@ The options object recognizes the following settings:
 
 ## Utility Functions
 
-This plugin also provides some control of it's functionality via the 'this' variable inside of your callback function.   You can access them via "this.fn" where "fn" is one of the functions described below.
+This plugin also provides some control of its functionality via the first argument to your callback function.   You can access them as properties of the first argument passed to your callback function, as described below.
 <table>
   <tr><th>Utility Function</th><th>Description</th></tr>
   <tr><td>ajax_complete(xhr, status)</td><td>A function to be called upon completion of a jQuery.ajax call.   This function will compare the response of current request to that of the previous request and increment or reset the time period accordingly.</td></tr>

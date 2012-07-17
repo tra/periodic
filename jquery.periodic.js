@@ -38,12 +38,12 @@ jQuery.periodic = function (options, callback) {
     cancel();
     // let it rip!
     settings.tid = setTimeout(function() {
-      // set the context (this) for the callback to the settings object
-      callback.call(settings);
+      // pass the settings into the callback
+      callback(settings);
 
       // compute the next value for cur_period
       increment();
-      
+
       // queue up the next run
       if(settings.tid)
         run();
@@ -84,7 +84,7 @@ jQuery.periodic = function (options, callback) {
     clearTimeout(settings.tid);
     settings.tid = null;
   }
-  
+
   // other functions we might want to implement
   function pause() {}
   function resume() {}
