@@ -19,7 +19,8 @@ jQuery.periodic = function (options, callback) {
     ajax_complete : ajaxComplete,
     increment     : increment,
     reset         : reset,
-    cancel        : cancel
+    cancel        : cancel,
+    setPeriod     : setPeriod
   }, options);
 
   // bookkeeping variables
@@ -83,6 +84,11 @@ jQuery.periodic = function (options, callback) {
   function cancel() {
     clearTimeout(settings.tid);
     settings.tid = null;
+  }
+
+  function setPeriod(new_period) {
+    settings.period = new_period;
+    reset();
   }
   
   // other functions we might want to implement
